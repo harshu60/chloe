@@ -7,7 +7,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.markdown import Markdown
 
-load_dotenv("/home/jolly/.env")
+load_dotenv()
 
 client = OpenAI(
     api_key=os.getenv("GROQ_API_KEY"),
