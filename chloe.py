@@ -10,9 +10,10 @@ from rich.markdown import Markdown
 load_dotenv()
 
 client = OpenAI(
-    api_key=os.getenv("GROQ_API_KEY"),
-    base_url="https://api.groq.com/openai/v1"
+    api_key=os.getenv("AI_API_KEY"),
+    base_url=os.getenv("AI_BASE_URL")
 )
+model = os.getenv("AI_MODEL", "mimo-v2.6-flash")
 console = Console()
 
 def list_files(directory="."):
@@ -85,7 +86,7 @@ def chloe_chat():
         {"role": "system", "content": "You are Chloe, a terminal agent. Use your tools to manage files. Be concise."}
     ]
 
-    console.print(Panel("[bold cyan]Chloe (Groq Edition) Active[/bold cyan]", expand=False))
+    console.print(Panel(f"[bold cyan]Chloe ({model}) Active[/bold cyan]", expand=False))
 
     while True:
         user_input = console.input("[bold blue]>>> [/bold blue]")
@@ -95,7 +96,7 @@ def chloe_chat():
         messages.append({"role": "user", "content": user_input})
 
         response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model=model,
             messages=messages,
             tools=tools
         )
@@ -123,7 +124,7 @@ def chloe_chat():
                 })
 
             second_response = client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
+                model=model,
                 messages=messages
             )
             final_text = second_response.choices[0].message.content
